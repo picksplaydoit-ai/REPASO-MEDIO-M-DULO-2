@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Repaso General — Laboratorio de Precisión</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F3EA;
+    --paper2:#EFEBDF;
+    --grid-line: rgba(31,42,68,0.07);
+    --ink:#1F2A44;
+    --ink-soft:#5A6580;
+    --accent:#C1432A;
+    --accent-soft:#F1CFC4;
+    --correct:#2E7D6B;
+    --correct-bg:#DFEEE8;
+    --wrong:#B23A2E;
+    --wrong-bg:#F7E3DF;
+    --line:#CFC8B4;
+    --card:#FFFDF8;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 27px, var(--grid-line) 27px, var(--grid-line) 28px),
+      repeating-linear-gradient(90deg, transparent, transparent 27px, var(--grid-line) 27px, var(--grid-line) 28px),
+      var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:32px 16px 64px;
+  }
+  .brand{
+    width:100%;
+    max-width:760px;
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin-bottom:22px;
+    border-bottom:2px solid var(--ink);
+    padding-bottom:10px;
+  }
+  .brand-title{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:15px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+  }
+  .brand-sub{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+
+  .ruler-wrap{
+    width:100%;
+    max-width:760px;
+    margin-bottom:26px;
+  }
+  .ruler-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--ink-soft);
+    letter-spacing:.06em;
+    margin-bottom:6px;
+    display:flex;
+    justify-content:space-between;
+  }
+  .ruler{
+    position:relative;
+    display:flex;
+    height:34px;
+    background:var(--card);
+    border:1.5px solid var(--ink);
+    border-radius:3px;
+    overflow:hidden;
+  }
+  .tick{
+    flex:1;
+    position:relative;
+    border-right:1px solid var(--line);
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    transition:background .25s ease;
+  }
+  .tick:last-child{border-right:none;}
+  .tick::after{
+    content:'';
+    width:1px;
+    height:8px;
+    background:var(--ink-soft);
+  }
+  .tick.major::after{ height:14px; background:var(--ink); }
+  .tick.correct{ background:var(--correct-bg); }
+  .tick.correct::after{ background:var(--correct); height:16px; }
+  .tick.wrong{ background:var(--wrong-bg); }
+  .tick.wrong::after{ background:var(--wrong); height:16px; }
+  .tick.current{ background:var(--accent-soft); }
+  .tick.current::after{ background:var(--accent); height:20px; width:2px; }
+
+  .card{
+    width:100%;
+    max-width:760px;
+    background:var(--card);
+    border:1.5px solid var(--ink);
+    border-radius:4px;
+    padding:36px 38px;
+    box-shadow:5px 5px 0 rgba(31,42,68,0.10);
+  }
+
+  .start h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:28px;
+    line-height:1.25;
+    margin:0 0 10px;
+  }
+  .start p.lead{
+    color:var(--ink-soft);
+    font-size:15px;
+    line-height:1.6;
+    margin:0 0 26px;
+  }
+  .badge-row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:28px;
+  }
+  .badge{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    padding:5px 10px;
+    border:1px solid var(--ink);
+    border-radius:20px;
+    color:var(--ink);
+  }
+  label{
+    display:block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+  }
+  .field{ margin-bottom:18px; }
+  input[type=text]{
+    width:100%;
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:16px;
+    padding:12px 14px;
+    border:1.5px solid var(--ink);
+    border-radius:3px;
+    background:var(--paper);
+    color:var(--ink);
+  }
+  input[type=text]:focus{ outline:2px solid var(--accent); outline-offset:1px; }
+
+  button{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;
+    font-size:15px;
+    cursor:pointer;
+    border-radius:3px;
+    border:1.5px solid var(--ink);
+    transition:transform .12s ease, background .15s ease;
+  }
+  button:active{ transform:translateY(1px); }
+  .btn-primary{
+    background:var(--ink);
+    color:var(--paper);
+    padding:13px 26px;
+  }
+  .btn-primary:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn-primary:disabled{
+    opacity:.4; cursor:not-allowed; background:var(--ink-soft); border-color:var(--ink-soft);
+  }
+  .btn-ghost{
+    background:transparent;
+    color:var(--ink);
+    padding:11px 22px;
+  }
+  .btn-ghost:hover{ background:var(--paper2); }
+  .err-msg{ color:var(--wrong); font-size:13px; font-family:'IBM Plex Mono',monospace; margin-top:-8px; margin-bottom:14px; display:none;}
+
+  .q-meta{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    font-weight:600;
+  }
+  .q-count{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    color:var(--ink-soft);
+  }
+  .q-text{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:20px;
+    line-height:1.45;
+    margin:0 0 22px;
+  }
+  .q-text .data{ font-family:'IBM Plex Mono', monospace; color:var(--ink); font-weight:600;}
+
+  .options{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-bottom:8px;
+  }
+  .option{
+    text-align:left;
+    background:var(--paper);
+    border:1.5px solid var(--line);
+    padding:13px 16px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:15px;
+    color:var(--ink);
+    border-radius:3px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .option:hover:not(:disabled){ border-color:var(--ink); background:var(--paper2); }
+  .option .tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--ink-soft);
+    border:1px solid var(--line);
+    border-radius:50%;
+    width:20px; height:20px;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .option.selected-correct{ background:var(--correct-bg); border-color:var(--correct); }
+  .option.selected-correct .tag{ background:var(--correct); color:#fff; border-color:var(--correct);}
+  .option.selected-wrong{ background:var(--wrong-bg); border-color:var(--wrong); }
+  .option.selected-wrong .tag{ background:var(--wrong); color:#fff; border-color:var(--wrong);}
+  .option.reveal-correct{ border-color:var(--correct); }
+  .option:disabled{ cursor:default; }
+
+  .feedback{
+    margin-top:18px;
+    padding:14px 16px;
+    border-radius:3px;
+    font-size:14px;
+    line-height:1.6;
+    display:none;
+  }
+  .feedback.show{ display:block; }
+  .feedback.ok{ background:var(--correct-bg); border:1px solid var(--correct); color:#1c4d40; }
+  .feedback.bad{ background:var(--wrong-bg); border:1px solid var(--wrong); color:#7a281f; }
+  .feedback .fb-title{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    display:block;
+    margin-bottom:4px;
+  }
+
+  .nav-row{
+    display:flex;
+    justify-content:flex-end;
+    margin-top:26px;
+  }
+
+  .result-head{
+    text-align:center;
+    margin-bottom:28px;
+  }
+  .result-head .eyebrow{ display:block; margin-bottom:8px; }
+  .result-head h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:26px;
+    margin:0 0 4px;
+  }
+  .result-head .who{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--ink-soft);
+    font-size:13.5px;
+  }
+  .grade-box{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:36px;
+    margin:26px 0 30px;
+    flex-wrap:wrap;
+  }
+  .grade-circle{
+    width:132px; height:132px;
+    border-radius:50%;
+    border:3px solid var(--ink);
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    background:var(--paper);
+  }
+  .grade-circle .num{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:38px;
+    font-weight:700;
+    line-height:1;
+  }
+  .grade-circle .of{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--ink-soft);
+    margin-top:2px;
+  }
+  .stat-list{ display:flex; flex-direction:column; gap:10px; }
+  .stat-row{
+    display:flex; align-items:center; gap:10px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:14px;
+  }
+  .dot{ width:11px; height:11px; border-radius:50%; }
+  .dot.ok{ background:var(--correct); }
+  .dot.bad{ background:var(--wrong); }
+
+  .breakdown{
+    border-top:1.5px dashed var(--line);
+    padding-top:20px;
+    margin-top:8px;
+  }
+  .breakdown h2{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:14px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    margin:0 0 14px;
+  }
+  .cat-row{
+    display:flex;
+    justify-content:space-between;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    padding:7px 0;
+    border-bottom:1px solid var(--grid-line);
+  }
+  .cat-row span:last-child{ color:var(--ink-soft); }
+
+  .result-actions{
+    display:flex;
+    gap:12px;
+    justify-content:center;
+    margin-top:30px;
+    flex-wrap:wrap;
+  }
+
+  .hidden{ display:none !important; }
+
+  @media print{
+    body{ background:#fff; padding:0; }
+    .ruler-wrap, .brand, .result-actions{ display:none !important; }
+    .card{ box-shadow:none; border:1px solid #000; }
+  }
+
+  @media (max-width:600px){
+    .card{ padding:26px 20px; }
+    .start h1{ font-size:23px; }
+    .q-text{ font-size:18px; }
+    .grade-box{ gap:20px; }
+  }
+
+  .open-response{
+    width:100%;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:16px;
+    padding:12px 14px;
+    border:1.5px solid var(--ink);
+    border-radius:3px;
+    background:var(--paper);
+    color:var(--ink);
+    margin-top:6px;
+  }
+  .open-response:focus{ outline:2px solid var(--accent); outline-offset:1px; }
+  .open-response:disabled{ opacity:0.6; cursor:not-allowed; }
+
+  .tag-razonamiento{
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    background:var(--accent-soft);
+    color:var(--accent);
+    padding:2px 10px;
+    border-radius:12px;
+    margin-bottom:8px;
+    font-weight:600;
+  }
+  .tag-intermedia{
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    background:#E8DFF0;
+    color:#6B4C7A;
+    padding:2px 10px;
+    border-radius:12px;
+    margin-bottom:8px;
+    font-weight:600;
+  }
+</style>
+</head>
+<body>
+
+<div class="brand">
+  <div class="brand-title">Laboratorio de Precisión</div>
+  <div class="brand-sub">Repaso General · Termodinámica · Notación · Cifras · Conversiones · v1.0</div>
+</div>
+
+<div class="ruler-wrap" id="rulerWrap" style="display:none;">
+  <div class="ruler-label"><span id="rulerLabel">Pregunta 1 de 18</span><span id="rulerPct">0%</span></div>
+  <div class="ruler" id="ruler"></div>
+</div>
+
+<div class="card">
+
+  <!-- START SCREEN -->
+  <div class="start" id="screenStart">
+    <h1>18 ejercicios de repaso general</h1>
+    <p class="lead">Practica clasificación de sistemas termodinámicos, notación científica, operaciones con cifras significativas y análisis dimensional con casos aplicados.</p>
+    <div class="badge-row">
+      <span class="badge">01–05 Sistemas termodinámicos</span>
+      <span class="badge">06–08 Notación científica → decimal</span>
+      <span class="badge">09–13 Sumas y multiplicaciones (cifras sig.)</span>
+      <span class="badge">14–18 Análisis dimensional</span>
+    </div>
+    <div class="field">
+      <label for="inpName">Nombre completo</label>
+      <input type="text" id="inpName" placeholder="Ej. María Fernanda López">
+    </div>
+    <div class="field">
+      <label for="inpGroup">Grupo</label>
+      <input type="text" id="inpGroup" placeholder="Ej. 3°B">
+    </div>
+    <div class="err-msg" id="startErr">Por favor escribe tu nombre y tu grupo antes de comenzar.</div>
+    <button class="btn-primary" id="btnStart">Comenzar actividad →</button>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="screenQuiz" class="hidden">
+    <div class="q-meta">
+      <span class="eyebrow" id="qCategory">Categoría</span>
+      <span class="q-count" id="qCount">Pregunta 1/18</span>
+    </div>
+    <div id="qTagContainer"></div>
+    <p class="q-text" id="qText"></p>
+    <div class="options" id="qOptions"></div>
+    <div id="qOpenContainer" style="display:none; margin-top: 12px;">
+      <input type="text" class="open-response" id="qOpenInput" placeholder="Escribe tu respuesta aquí...">
+    </div>
+    <div class="feedback" id="qFeedback">
+      <span class="fb-title" id="fbTitle"></span>
+      <span id="fbBody"></span>
+    </div>
+    <div class="nav-row">
+      <button class="btn-primary" id="btnNext" disabled>Siguiente →</button>
+    </div>
+  </div>
+
+  <!-- RESULT SCREEN -->
+  <div id="screenResult" class="hidden">
+    <div class="result-head">
+      <span class="eyebrow">Resultado final</span>
+      <h1 id="resName">—</h1>
+      <div class="who" id="resGroup">—</div>
+    </div>
+    <div class="grade-box">
+      <div class="grade-circle">
+        <div class="num" id="resGrade">0.0</div>
+        <div class="of">CALIFICACIÓN / 100</div>
+      </div>
+      <div class="stat-list">
+        <div class="stat-row"><span class="dot ok"></span><span id="resCorrect">0 aciertos</span></div>
+        <div class="stat-row"><span class="dot bad"></span><span id="resWrong">0 errores</span></div>
+        <div class="stat-row" style="color:var(--ink-soft)"><span style="width:11px"></span><span id="resDate"></span></div>
+      </div>
+    </div>
+    <div class="breakdown">
+      <h2>Desglose por categoría</h2>
+      <div id="catBreakdown"></div>
+    </div>
+    <div class="result-actions">
+      <button class="btn-ghost" onclick="window.print()">Imprimir / guardar resultado</button>
+      <button class="btn-primary" id="btnRestart">Repetir actividad</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* =========================================================
+   BANCO DE 18 PREGUNTAS - REPASO GENERAL
+   ========================================================= */
+const QUESTIONS = [
+  // ---- 1-5: Sistemas termodinámicos ----
+  { cat:"Sistemas termodinámicos", dificultad:"Fácil",
+    text:'Una olla de agua hirviendo sobre la estufa sin tapadera, emitiendo vapor de agua al aire y transfiriendo calor hacia la cocina:',
+    options:["Sistema Abierto","Sistema Cerrado","Sistema Aislado","Ninguno de los anteriores"], correct:0,
+    fb:"Es un sistema abierto porque intercambia materia (vapor de agua) y energía (calor) con el entorno." },
+  { cat:"Sistemas termodinámicos", dificultad:"Fácil",
+    text:'Una ampolleta de vidrio medicinal completamente sellada con suero en su interior, sumergida en agua helada para enfriarse:',
+    options:["Sistema Abierto","Sistema Cerrado","Sistema Aislado","Ninguno de los anteriores"], correct:1,
+    fb:"Es un sistema cerrado porque intercambia energía (calor) con el entorno, pero no materia." },
+  { cat:"Sistemas termodinámicos", dificultad:"Intermedia",
+    text:'Un termo de laboratorio con paredes dobles al vacío y tapas herméticas con nitrógeno líquido, sin fuga de gas ni flujo de calor:',
+    options:["Sistema Abierto","Sistema Cerrado","Sistema Aislado","Ninguno de los anteriores"], correct:2,
+    fb:"Es un sistema aislado porque no intercambia ni materia ni energía con el entorno." },
+  { cat:"Sistemas termodinámicos", dificultad:"Intermedia",
+    text:'Un globo elástico de látex inflado con helio y anudado herméticamente, que se expande bajo el rayo del sol al calentarse:',
+    options:["Sistema Abierto","Sistema Cerrado","Sistema Aislado","Ninguno de los anteriores"], correct:1,
+    fb:"Es un sistema cerrado porque el helio no escapa (no hay intercambio de materia), pero sí recibe energía del sol." },
+  { cat:"Sistemas termodinámicos", dificultad:"Razonamiento",
+    text:'Una persona realizando ejercicio intenso, que transpira eliminando vapor de agua y cede calor al entorno:',
+    options:["Sistema Abierto","Sistema Cerrado","Sistema Aislado","Ninguno de los anteriores"], correct:0,
+    fb:"Es un sistema abierto porque elimina materia (sudor/vapor) y energía (calor) al entorno." },
+
+  // ---- 6-8: Notación científica → decimal ----
+  { cat:"Notación científica → decimal", dificultad:"Fácil",
+    text:'Convierte a decimal: <span class="data">3.82 × 10⁴ m</span>',
+    open:true, correctAnswer:"38200",
+    fb:"3.82 × 10⁴ = 38,200 m (se mueve el punto decimal 4 posiciones a la derecha)." },
+  { cat:"Notación científica → decimal", dificultad:"Fácil",
+    text:'Convierte a decimal: <span class="data">5.16 × 10⁻³ kg</span>',
+    open:true, correctAnswer:"0.00516",
+    fb:"5.16 × 10⁻³ = 0.00516 kg (se mueve el punto decimal 3 posiciones a la izquierda)." },
+  { cat:"Notación científica → decimal", dificultad:"Intermedia",
+    text:'Convierte a decimal: <span class="data">7.02 × 10⁻⁵ L</span>',
+    open:true, correctAnswer:"0.0000702",
+    fb:"7.02 × 10⁻⁵ = 0.0000702 L (se mueve el punto decimal 5 posiciones a la izquierda)." },
+
+  // ---- 9-13: Sumas y multiplicaciones con cifras significativas ----
+  { cat:"Sumas y multiplicaciones (cifras sig.)", dificultad:"Intermedia",
+    text:'Efectúa la suma y redondea respetando cifras significativas: <span class="data">24.52 g + 3.1 g + 0.478 g</span>',
+    open:true, correctAnswer:"28.1",
+    fb:"24.52 + 3.1 + 0.478 = 28.098 g. El menor número de decimales es 1 (3.1), por lo que se redondea a 1 decimal: 28.1 g." },
+  { cat:"Sumas y multiplicaciones (cifras sig.)", dificultad:"Intermedia",
+    text:'Efectúa la suma y redondea: <span class="data">128.60 cm + 45.284 cm + 12.1 cm</span>',
+    open:true, correctAnswer:"185.9",
+    fb:"128.60 + 45.284 + 12.1 = 185.984 cm. El menor número de decimales es 1 (12.1), por lo que se redondea a 1 decimal: 185.9 cm." },
+  { cat:"Sumas y multiplicaciones (cifras sig.)", dificultad:"Intermedia",
+    text:'Efectúa la multiplicación y redondea: <span class="data">5.24 m × 2.6 m</span>',
+    open:true, correctAnswer:"13.6",
+    fb:"5.24 × 2.6 = 13.624 m². El menor número de cifras significativas es 2 (2.6), por lo que se redondea a 2 cifras: 13.6 m²." },
+  { cat:"Sumas y multiplicaciones (cifras sig.)", dificultad:"Razonamiento",
+    text:'Efectúa la multiplicación y redondea: <span class="data">12.35 cm × 0.40 cm</span>',
+    open:true, correctAnswer:"4.9",
+    fb:"12.35 × 0.40 = 4.94 cm². 0.40 tiene 2 cifras significativas, por lo que el resultado se redondea a 2 cifras: 4.9 cm²." },
+  { cat:"Sumas y multiplicaciones (cifras sig.)", dificultad:"Razonamiento",
+    text:'Efectúa la división y redondea: <span class="data">48.750 g ÷ 6.2 mL</span>',
+    open:true, correctAnswer:"7.9",
+    fb:"48.750 / 6.2 = 7.8629... g/mL. 6.2 tiene 2 cifras significativas, por lo que se redondea a 2 cifras: 7.9 g/mL." },
+
+  // ---- 14-18: Análisis dimensional ----
+  { cat:"Análisis dimensional", dificultad:"Intermedia",
+    text:'Un automóvil circula a <span class="data">108 km/h</span>. Determina su velocidad en m/s. (1 km = 1000 m, 1 h = 3600 s)',
+    open:true, correctAnswer:"30",
+    fb:"108 km/h = 108 × (1000 m / 1 km) × (1 h / 3600 s) = 108,000 / 3600 = 30 m/s." },
+  { cat:"Análisis dimensional", dificultad:"Intermedia",
+    text:'En el laboratorio se emplean <span class="data">2.5 litros</span> de solución. Expresa este volumen en centímetros cúbicos (cm³). (1 L = 1000 cm³)',
+    open:true, correctAnswer:"2500",
+    fb:"2.5 L = 2.5 × 1000 cm³ = 2,500 cm³." },
+  { cat:"Análisis dimensional", dificultad:"Intermedia",
+    text:'Una muestra de reactivo tiene una masa de <span class="data">0.75 kilogramos</span>. Convierte a miligramos (mg). (1 kg = 1,000,000 mg)',
+    open:true, correctAnswer:"750000",
+    fb:"0.75 kg = 0.75 × 1,000,000 mg = 750,000 mg." },
+  { cat:"Análisis dimensional", dificultad:"Razonamiento",
+    text:'Un maratonista corre a <span class="data">4.5 m/s</span>. Calcula su rapidez en km/h. (1 km = 1000 m, 1 h = 3600 s)',
+    open:true, correctAnswer:"16.2",
+    fb:"4.5 m/s = 4.5 × (1 km / 1000 m) × (3600 s / 1 h) = 4.5 × 3.6 = 16.2 km/h." },
+  { cat:"Análisis dimensional", dificultad:"Razonamiento",
+    text:'Una tubería transporta agua con un caudal de <span class="data">180 L/min</span>. Expresa este flujo en L/s. (1 min = 60 s)',
+    open:true, correctAnswer:"3",
+    fb:"180 L/min = 180 / 60 = 3 L/s." },
+];
+
+/* =========================================================
+   ESTADO
+   ========================================================= */
+let studentName = "";
+let studentGroup = "";
+let current = 0;
+let answered = new Array(QUESTIONS.length).fill(null);
+let openResponses = new Array(QUESTIONS.length).fill("");
+
+/* =========================================================
+   ELEMENTOS
+   ========================================================= */
+const screenStart = document.getElementById('screenStart');
+const screenQuiz = document.getElementById('screenQuiz');
+const screenResult = document.getElementById('screenResult');
+const rulerWrap = document.getElementById('rulerWrap');
+const ruler = document.getElementById('ruler');
+const rulerLabel = document.getElementById('rulerLabel');
+const rulerPct = document.getElementById('rulerPct');
+
+const qCategory = document.getElementById('qCategory');
+const qCount = document.getElementById('qCount');
+const qText = document.getElementById('qText');
+const qOptions = document.getElementById('qOptions');
+const qOpenContainer = document.getElementById('qOpenContainer');
+const qOpenInput = document.getElementById('qOpenInput');
+const qFeedback = document.getElementById('qFeedback');
+const fbTitle = document.getElementById('fbTitle');
+const fbBody = document.getElementById('fbBody');
+const btnNext = document.getElementById('btnNext');
+const qTagContainer = document.getElementById('qTagContainer');
+
+/* construir ticks de la regla */
+QUESTIONS.forEach((_, i) => {
+  const t = document.createElement('div');
+  t.className = 'tick' + ((i+1) % 5 === 0 ? ' major' : '');
+  t.id = 'tick-' + i;
+  ruler.appendChild(t);
+});
+
+function updateRuler(){
+  QUESTIONS.forEach((_, i) => {
+    const t = document.getElementById('tick-' + i);
+    t.classList.remove('correct','wrong','current');
+    if (answered[i] === true) t.classList.add('correct');
+    else if (answered[i] === false) t.classList.add('wrong');
+    if (i === current) t.classList.add('current');
+  });
+  rulerLabel.textContent = `Pregunta ${current+1} de ${QUESTIONS.length}`;
+  const answeredCount = answered.filter(a => a !== null).length;
+  rulerPct.textContent = Math.round((answeredCount / QUESTIONS.length) * 100) + '%';
+}
+
+/* =========================================================
+   INICIO
+   ========================================================= */
+document.getElementById('btnStart').addEventListener('click', () => {
+  const name = document.getElementById('inpName').value.trim();
+  const group = document.getElementById('inpGroup').value.trim();
+  const err = document.getElementById('startErr');
+  if (!name || !group) {
+    err.style.display = 'block';
+    return;
+  }
+  err.style.display = 'none';
+  studentName = name;
+  studentGroup = group;
+  screenStart.classList.add('hidden');
+  screenQuiz.classList.remove('hidden');
+  rulerWrap.style.display = 'block';
+  renderQuestion();
+});
+
+/* =========================================================
+   FUNCIÓN PARA VALIDAR RESPUESTA ABIERTA
+   ========================================================= */
+function validateOpenResponse() {
+  const q = QUESTIONS[current];
+  const userAnswer = qOpenInput.value.trim();
+  if (!userAnswer) return false;
+  
+  openResponses[current] = userAnswer;
+  const normalizedUser = userAnswer.replace(/[^0-9\-.]/g, '');
+  const normalizedCorrect = q.correctAnswer.replace(/[^0-9\-.]/g, '');
+  const userNum = parseFloat(normalizedUser);
+  const correctNum = parseFloat(normalizedCorrect);
+  const tolerance = Math.abs(correctNum) * 0.02;
+  const isCorrect = !isNaN(userNum) && !isNaN(correctNum) && Math.abs(userNum - correctNum) <= Math.max(tolerance, 0.5);
+
+  answered[current] = isCorrect;
+  qOpenInput.disabled = true;
+
+  qFeedback.classList.add('show', isCorrect ? 'ok' : 'bad');
+  fbTitle.textContent = isCorrect ? '✓ Correcto' : '✗ Incorrecto';
+  fbBody.textContent = q.fb + ` (Respuesta esperada: ${q.correctAnswer})`;
+
+  btnNext.disabled = false;
+  updateRuler();
+  return true;
+}
+
+/* =========================================================
+   RENDER PREGUNTA
+   ========================================================= */
+function renderQuestion(){
+  const q = QUESTIONS[current];
+  qCategory.textContent = q.cat;
+  qCount.textContent = `Pregunta ${current+1}/${QUESTIONS.length}`;
+  
+  let tagClass = 'tag-razonamiento';
+  if (q.dificultad === 'Fácil') tagClass = 'tag-razonamiento';
+  else if (q.dificultad === 'Intermedia') tagClass = 'tag-intermedia';
+  qTagContainer.innerHTML = `<span class="${tagClass}">${q.dificultad}</span>`;
+  
+  qText.innerHTML = q.text;
+  qOptions.innerHTML = '';
+  qFeedback.classList.remove('show','ok','bad');
+  btnNext.disabled = true;
+  btnNext.textContent = current === QUESTIONS.length - 1 ? 'Ver resultados →' : 'Siguiente →';
+
+  const isOpen = q.open === true;
+  qOptions.style.display = isOpen ? 'none' : 'flex';
+  qOpenContainer.style.display = isOpen ? 'block' : 'none';
+  qOpenInput.value = openResponses[current] || '';
+
+  if (!isOpen) {
+    const letters = ['A','B','C','D'];
+    q.options.forEach((opt, idx) => {
+      const b = document.createElement('button');
+      b.className = 'option';
+      b.innerHTML = `<span class="tag">${letters[idx]}</span><span>${opt}</span>`;
+      b.addEventListener('click', () => selectOption(idx));
+      qOptions.appendChild(b);
+    });
+
+    if (answered[current] !== null) {
+      lockOptions(QUESTIONS[current].correct, answered[current] ? QUESTIONS[current].correct : -1);
+    }
+  } else {
+    qOpenInput.disabled = false;
+    qOpenInput.focus();
+    
+    // El botón Siguiente se activa cuando el usuario escribe
+    qOpenInput.addEventListener('input', function() {
+      if (this.value.trim() !== '' && answered[current] === null) {
+        btnNext.disabled = false;
+        openResponses[current] = this.value.trim();
+      } else if (this.value.trim() === '' && answered[current] === null) {
+        btnNext.disabled = true;
+      }
+    });
+    
+    if (answered[current] !== null) {
+      qOpenInput.disabled = true;
+      qFeedback.classList.add('show', answered[current] ? 'ok' : 'bad');
+      fbTitle.textContent = answered[current] ? '✓ Correcto' : '✗ Incorrecto';
+      fbBody.textContent = q.fb + ` (Respuesta esperada: ${q.correctAnswer})`;
+      btnNext.disabled = false;
+    }
+  }
+  updateRuler();
+}
+
+function selectOption(idx){
+  const q = QUESTIONS[current];
+  const isCorrect = idx === q.correct;
+  answered[current] = isCorrect;
+  lockOptions(q.correct, idx);
+
+  qFeedback.classList.add('show', isCorrect ? 'ok' : 'bad');
+  fbTitle.textContent = isCorrect ? '✓ Correcto' : '✗ Incorrecto';
+  fbBody.textContent = q.fb;
+
+  btnNext.disabled = false;
+  updateRuler();
+}
+
+function lockOptions(correctIdx, selectedIdx){
+  const opts = qOptions.querySelectorAll('.option');
+  opts.forEach((b, idx) => {
+    b.disabled = true;
+    b.style.cursor = 'default';
+    if (idx === correctIdx) b.classList.add('reveal-correct');
+    if (idx === selectedIdx && idx === correctIdx) b.classList.add('selected-correct');
+    else if (idx === selectedIdx && idx !== correctIdx) b.classList.add('selected-wrong');
+  });
+}
+
+/* =========================================================
+   MANEJADOR DEL BOTÓN SIGUIENTE
+   ========================================================= */
+btnNext.addEventListener('click', function() {
+  const q = QUESTIONS[current];
+  
+  if (q.open && answered[current] === null) {
+    const isValid = validateOpenResponse();
+    if (!isValid) return;
+    if (answered[current] === null) return;
+  }
+  
+  if (current < QUESTIONS.length - 1){
+    current++;
+    renderQuestion();
+  } else {
+    showResults();
+  }
+});
+
+/* =========================================================
+   RESULTADOS
+   ========================================================= */
+function showResults(){
+  screenQuiz.classList.add('hidden');
+  rulerWrap.style.display = 'none';
+  screenResult.classList.remove('hidden');
+
+  const correctCount = answered.filter(a => a === true).length;
+  const wrongCount = answered.filter(a => a === false).length;
+  const total = QUESTIONS.length;
+  const grade = (correctCount / total) * 100;
+
+  document.getElementById('resName').textContent = studentName;
+  document.getElementById('resGroup').textContent = 'Grupo: ' + studentGroup;
+  document.getElementById('resGrade').textContent = grade.toFixed(1);
+  document.getElementById('resCorrect').textContent = `${correctCount} aciertos`;
+  document.getElementById('resWrong').textContent = `${wrongCount} errores`;
+  document.getElementById('resDate').textContent = new Date().toLocaleString('es-MX', {
+    dateStyle:'long', timeStyle:'short'
+  });
+
+  const grade_num = document.getElementById('resGrade');
+  grade_num.style.color = grade >= 60 ? 'var(--correct)' : 'var(--wrong)';
+
+  const cats = {};
+  QUESTIONS.forEach((q, i) => {
+    if (!cats[q.cat]) cats[q.cat] = { correct:0, total:0 };
+    cats[q.cat].total++;
+    if (answered[i] === true) cats[q.cat].correct++;
+  });
+  const catBreakdown = document.getElementById('catBreakdown');
+  catBreakdown.innerHTML = '';
+  Object.keys(cats).forEach(cat => {
+    const row = document.createElement('div');
+    row.className = 'cat-row';
+    row.innerHTML = `<span>${cat}</span><span>${cats[cat].correct} / ${cats[cat].total}</span>`;
+    catBreakdown.appendChild(row);
+  });
+}
+
+document.getElementById('btnRestart').addEventListener('click', () => {
+  current = 0;
+  answered = new Array(QUESTIONS.length).fill(null);
+  openResponses = new Array(QUESTIONS.length).fill("");
+  screenResult.classList.add('hidden');
+  screenStart.classList.remove('hidden');
+  document.getElementById('inpName').value = '';
+  document.getElementById('inpGroup').value = '';
+});
+</script>
+</body>
+</html>
