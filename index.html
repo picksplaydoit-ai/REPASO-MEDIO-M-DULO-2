@@ -427,7 +427,7 @@
 
 <div class="brand">
   <div class="brand-title">Laboratorio de Precisión</div>
-  <div class="brand-sub">Repaso General · Termodinámica · Notación · Cifras · Conversiones · v1.0</div>
+  <div class="brand-sub">Repaso General · v2.0</div>
 </div>
 
 <div class="ruler-wrap" id="rulerWrap" style="display:none;">
@@ -444,7 +444,7 @@
     <div class="badge-row">
       <span class="badge">01–05 Sistemas termodinámicos</span>
       <span class="badge">06–08 Notación científica → decimal</span>
-      <span class="badge">09–13 Sumas y multiplicaciones (cifras sig.)</span>
+      <span class="badge">09–13 Cifras significativas</span>
       <span class="badge">14–18 Análisis dimensional</span>
     </div>
     <div class="field">
@@ -512,88 +512,88 @@
 
 <script>
 /* =========================================================
-   BANCO DE 18 PREGUNTAS - REPASO GENERAL
+   BANCO DE 18 PREGUNTAS - REPASO GENERAL (VERSIÓN DIFERENTE)
    ========================================================= */
 const QUESTIONS = [
   // ---- 1-5: Sistemas termodinámicos ----
   { cat:"Sistemas termodinámicos", dificultad:"Fácil",
-    text:'Una olla de agua hirviendo sobre la estufa sin tapadera, emitiendo vapor de agua al aire y transfiriendo calor hacia la cocina:',
+    text:'Un recipiente de vidrio destapado que contiene agua caliente y libera vapor al ambiente mientras se enfría:',
     options:["Sistema Abierto","Sistema Cerrado","Sistema Aislado","Ninguno de los anteriores"], correct:0,
-    fb:"Es un sistema abierto porque intercambia materia (vapor de agua) y energía (calor) con el entorno." },
+    fb:"Es un sistema abierto porque libera materia (vapor de agua) y energía (calor) al entorno." },
   { cat:"Sistemas termodinámicos", dificultad:"Fácil",
-    text:'Una ampolleta de vidrio medicinal completamente sellada con suero en su interior, sumergida en agua helada para enfriarse:',
+    text:'Una botella de plástico perfectamente sellada con refresco en su interior, que se enfría dentro de un refrigerador:',
     options:["Sistema Abierto","Sistema Cerrado","Sistema Aislado","Ninguno de los anteriores"], correct:1,
-    fb:"Es un sistema cerrado porque intercambia energía (calor) con el entorno, pero no materia." },
+    fb:"Es un sistema cerrado porque intercambia energía (calor con el refrigerador) pero no materia." },
   { cat:"Sistemas termodinámicos", dificultad:"Intermedia",
-    text:'Un termo de laboratorio con paredes dobles al vacío y tapas herméticas con nitrógeno líquido, sin fuga de gas ni flujo de calor:',
+    text:'Una caja de unicel con paredes gruesas que contiene hielo seco, completamente sellada para evitar cualquier intercambio con el exterior:',
     options:["Sistema Abierto","Sistema Cerrado","Sistema Aislado","Ninguno de los anteriores"], correct:2,
-    fb:"Es un sistema aislado porque no intercambia ni materia ni energía con el entorno." },
+    fb:"Es un sistema aislado porque, en teoría, no intercambia ni materia ni energía con el entorno." },
   { cat:"Sistemas termodinámicos", dificultad:"Intermedia",
-    text:'Un globo elástico de látex inflado con helio y anudado herméticamente, que se expande bajo el rayo del sol al calentarse:',
+    text:'Un envase de aerosol metálico sellado herméticamente que se calienta bajo el sol, aumentando la presión interna sin que escape el gas:',
     options:["Sistema Abierto","Sistema Cerrado","Sistema Aislado","Ninguno de los anteriores"], correct:1,
-    fb:"Es un sistema cerrado porque el helio no escapa (no hay intercambio de materia), pero sí recibe energía del sol." },
+    fb:"Es un sistema cerrado porque recibe energía del sol, pero el gas no escapa (no hay intercambio de materia)." },
   { cat:"Sistemas termodinámicos", dificultad:"Razonamiento",
-    text:'Una persona realizando ejercicio intenso, que transpira eliminando vapor de agua y cede calor al entorno:',
+    text:'Un motor de automóvil en funcionamiento que consume gasolina, expulsa gases por el escape y disipa calor al ambiente:',
     options:["Sistema Abierto","Sistema Cerrado","Sistema Aislado","Ninguno de los anteriores"], correct:0,
-    fb:"Es un sistema abierto porque elimina materia (sudor/vapor) y energía (calor) al entorno." },
+    fb:"Es un sistema abierto porque intercambia materia (entra gasolina, salen gases) y energía (calor) con el entorno." },
 
   // ---- 6-8: Notación científica → decimal ----
   { cat:"Notación científica → decimal", dificultad:"Fácil",
-    text:'Convierte a decimal: <span class="data">3.82 × 10⁴ m</span>',
-    open:true, correctAnswer:"38200",
-    fb:"3.82 × 10⁴ = 38,200 m (se mueve el punto decimal 4 posiciones a la derecha)." },
+    text:'Convierte a decimal: <span class="data">6.74 × 10³ g</span>',
+    open:true, correctAnswer:"6740",
+    fb:"6.74 × 10³ = 6,740 g (se mueve el punto decimal 3 posiciones a la derecha)." },
   { cat:"Notación científica → decimal", dificultad:"Fácil",
-    text:'Convierte a decimal: <span class="data">5.16 × 10⁻³ kg</span>',
-    open:true, correctAnswer:"0.00516",
-    fb:"5.16 × 10⁻³ = 0.00516 kg (se mueve el punto decimal 3 posiciones a la izquierda)." },
+    text:'Convierte a decimal: <span class="data">2.89 × 10⁻⁴ m</span>',
+    open:true, correctAnswer:"0.000289",
+    fb:"2.89 × 10⁻⁴ = 0.000289 m (se mueve el punto decimal 4 posiciones a la izquierda)." },
   { cat:"Notación científica → decimal", dificultad:"Intermedia",
-    text:'Convierte a decimal: <span class="data">7.02 × 10⁻⁵ L</span>',
-    open:true, correctAnswer:"0.0000702",
-    fb:"7.02 × 10⁻⁵ = 0.0000702 L (se mueve el punto decimal 5 posiciones a la izquierda)." },
+    text:'Convierte a decimal: <span class="data">4.507 × 10⁻² kg</span>',
+    open:true, correctAnswer:"0.04507",
+    fb:"4.507 × 10⁻² = 0.04507 kg (se mueve el punto decimal 2 posiciones a la izquierda)." },
 
-  // ---- 9-13: Sumas y multiplicaciones con cifras significativas ----
-  { cat:"Sumas y multiplicaciones (cifras sig.)", dificultad:"Intermedia",
-    text:'Efectúa la suma y redondea respetando cifras significativas: <span class="data">24.52 g + 3.1 g + 0.478 g</span>',
-    open:true, correctAnswer:"28.1",
-    fb:"24.52 + 3.1 + 0.478 = 28.098 g. El menor número de decimales es 1 (3.1), por lo que se redondea a 1 decimal: 28.1 g." },
-  { cat:"Sumas y multiplicaciones (cifras sig.)", dificultad:"Intermedia",
-    text:'Efectúa la suma y redondea: <span class="data">128.60 cm + 45.284 cm + 12.1 cm</span>',
-    open:true, correctAnswer:"185.9",
-    fb:"128.60 + 45.284 + 12.1 = 185.984 cm. El menor número de decimales es 1 (12.1), por lo que se redondea a 1 decimal: 185.9 cm." },
-  { cat:"Sumas y multiplicaciones (cifras sig.)", dificultad:"Intermedia",
-    text:'Efectúa la multiplicación y redondea: <span class="data">5.24 m × 2.6 m</span>',
-    open:true, correctAnswer:"13.6",
-    fb:"5.24 × 2.6 = 13.624 m². El menor número de cifras significativas es 2 (2.6), por lo que se redondea a 2 cifras: 13.6 m²." },
-  { cat:"Sumas y multiplicaciones (cifras sig.)", dificultad:"Razonamiento",
-    text:'Efectúa la multiplicación y redondea: <span class="data">12.35 cm × 0.40 cm</span>',
+  // ---- 9-13: Cifras significativas ----
+  { cat:"Cifras significativas", dificultad:"Intermedia",
+    text:'Efectúa la suma y redondea respetando cifras significativas: <span class="data">15.63 g + 2.4 g + 0.325 g</span>',
+    open:true, correctAnswer:"18.4",
+    fb:"15.63 + 2.4 + 0.325 = 18.355 g. El menor número de decimales es 1 (2.4), por lo que se redondea a 1 decimal: 18.4 g." },
+  { cat:"Cifras significativas", dificultad:"Intermedia",
+    text:'Efectúa la suma y redondea: <span class="data">75.40 cm + 3.256 cm + 18.5 cm</span>',
+    open:true, correctAnswer:"97.2",
+    fb:"75.40 + 3.256 + 18.5 = 97.156 cm. El menor número de decimales es 1 (18.5), por lo que se redondea a 1 decimal: 97.2 cm." },
+  { cat:"Cifras significativas", dificultad:"Intermedia",
+    text:'Efectúa la multiplicación y redondea: <span class="data">7.35 m × 3.1 m</span>',
+    open:true, correctAnswer:"23",
+    fb:"7.35 × 3.1 = 22.785 m². El menor número de cifras significativas es 2 (3.1), por lo que se redondea a 2 cifras: 23 m²." },
+  { cat:"Cifras significativas", dificultad:"Razonamiento",
+    text:'Efectúa la multiplicación y redondea: <span class="data">9.84 cm × 0.50 cm</span>',
     open:true, correctAnswer:"4.9",
-    fb:"12.35 × 0.40 = 4.94 cm². 0.40 tiene 2 cifras significativas, por lo que el resultado se redondea a 2 cifras: 4.9 cm²." },
-  { cat:"Sumas y multiplicaciones (cifras sig.)", dificultad:"Razonamiento",
-    text:'Efectúa la división y redondea: <span class="data">48.750 g ÷ 6.2 mL</span>',
-    open:true, correctAnswer:"7.9",
-    fb:"48.750 / 6.2 = 7.8629... g/mL. 6.2 tiene 2 cifras significativas, por lo que se redondea a 2 cifras: 7.9 g/mL." },
+    fb:"9.84 × 0.50 = 4.92 cm². 0.50 tiene 2 cifras significativas, por lo que el resultado se redondea a 2 cifras: 4.9 cm²." },
+  { cat:"Cifras significativas", dificultad:"Razonamiento",
+    text:'Efectúa la división y redondea: <span class="data">36.840 g ÷ 4.8 mL</span>',
+    open:true, correctAnswer:"7.7",
+    fb:"36.840 / 4.8 = 7.675 g/mL. 4.8 tiene 2 cifras significativas, por lo que se redondea a 2 cifras: 7.7 g/mL." },
 
   // ---- 14-18: Análisis dimensional ----
   { cat:"Análisis dimensional", dificultad:"Intermedia",
-    text:'Un automóvil circula a <span class="data">108 km/h</span>. Determina su velocidad en m/s. (1 km = 1000 m, 1 h = 3600 s)',
-    open:true, correctAnswer:"30",
-    fb:"108 km/h = 108 × (1000 m / 1 km) × (1 h / 3600 s) = 108,000 / 3600 = 30 m/s." },
+    text:'Un tren viaja a <span class="data">144 km/h</span>. Determina su velocidad en m/s. (1 km = 1000 m, 1 h = 3600 s)',
+    open:true, correctAnswer:"40",
+    fb:"144 km/h = 144 × (1000 m / 1 km) × (1 h / 3600 s) = 144,000 / 3600 = 40 m/s." },
   { cat:"Análisis dimensional", dificultad:"Intermedia",
-    text:'En el laboratorio se emplean <span class="data">2.5 litros</span> de solución. Expresa este volumen en centímetros cúbicos (cm³). (1 L = 1000 cm³)',
-    open:true, correctAnswer:"2500",
-    fb:"2.5 L = 2.5 × 1000 cm³ = 2,500 cm³." },
+    text:'En el laboratorio se emplean <span class="data">3.8 litros</span> de disolución. Expresa este volumen en centímetros cúbicos (cm³). (1 L = 1000 cm³)',
+    open:true, correctAnswer:"3800",
+    fb:"3.8 L = 3.8 × 1000 cm³ = 3,800 cm³." },
   { cat:"Análisis dimensional", dificultad:"Intermedia",
-    text:'Una muestra de reactivo tiene una masa de <span class="data">0.75 kilogramos</span>. Convierte a miligramos (mg). (1 kg = 1,000,000 mg)',
-    open:true, correctAnswer:"750000",
-    fb:"0.75 kg = 0.75 × 1,000,000 mg = 750,000 mg." },
+    text:'Una muestra de reactivo tiene una masa de <span class="data">0.42 kilogramos</span>. Convierte a miligramos (mg). (1 kg = 1,000,000 mg)',
+    open:true, correctAnswer:"420000",
+    fb:"0.42 kg = 0.42 × 1,000,000 mg = 420,000 mg." },
   { cat:"Análisis dimensional", dificultad:"Razonamiento",
-    text:'Un maratonista corre a <span class="data">4.5 m/s</span>. Calcula su rapidez en km/h. (1 km = 1000 m, 1 h = 3600 s)',
-    open:true, correctAnswer:"16.2",
-    fb:"4.5 m/s = 4.5 × (1 km / 1000 m) × (3600 s / 1 h) = 4.5 × 3.6 = 16.2 km/h." },
+    text:'Un ciclista se desplaza a <span class="data">6.0 m/s</span>. Calcula su rapidez en km/h. (1 km = 1000 m, 1 h = 3600 s)',
+    open:true, correctAnswer:"21.6",
+    fb:"6.0 m/s = 6.0 × (1 km / 1000 m) × (3600 s / 1 h) = 6.0 × 3.6 = 21.6 km/h." },
   { cat:"Análisis dimensional", dificultad:"Razonamiento",
-    text:'Una tubería transporta agua con un caudal de <span class="data">180 L/min</span>. Expresa este flujo en L/s. (1 min = 60 s)',
-    open:true, correctAnswer:"3",
-    fb:"180 L/min = 180 / 60 = 3 L/s." },
+    text:'Una bomba transporta agua con un caudal de <span class="data">240 L/min</span>. Expresa este flujo en L/s. (1 min = 60 s)',
+    open:true, correctAnswer:"4",
+    fb:"240 L/min = 240 / 60 = 4 L/s." },
 ];
 
 /* =========================================================
@@ -738,7 +738,6 @@ function renderQuestion(){
     qOpenInput.disabled = false;
     qOpenInput.focus();
     
-    // El botón Siguiente se activa cuando el usuario escribe
     qOpenInput.addEventListener('input', function() {
       if (this.value.trim() !== '' && answered[current] === null) {
         btnNext.disabled = false;
